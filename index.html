@@ -21,14 +21,14 @@
 
 <body>
 
-    <!-- Cinematic Game-Style Welcome Intro Screen -->
-    <div id="cinematic-intro" class="cinematic-intro-overlay" role="dialog" aria-label="Welcome Intro">
+    <!-- Welcome Intro Screen Overlay -->
+    <div id="welcome-intro" class="welcome-intro cinematic-intro-overlay" role="dialog" aria-label="Welcome Intro">
         <!-- Ambient Particle Canvas -->
-        <canvas id="intro-particles-canvas" class="intro-canvas"></canvas>
+        <canvas id="intro-particles-canvas" class="welcome-intro__particles intro-canvas"></canvas>
 
         <!-- Ambient Background Glow & Geometric Frame -->
-        <div class="intro-glow-bg"></div>
-        <div class="intro-grid-lines">
+        <div class="intro-glow-bg welcome-intro__glow"></div>
+        <div class="intro-grid-lines welcome-intro__grid">
             <div class="intro-line intro-line-h"></div>
             <div class="intro-line intro-line-v"></div>
             <div class="intro-corner intro-corner-tl"></div>
@@ -38,7 +38,7 @@
         </div>
 
         <!-- Skip Intro Button -->
-        <button id="intro-skip-btn" class="intro-skip-btn" aria-label="Skip intro animation">
+        <button id="intro-skip-btn" class="welcome-intro__skip intro-skip-btn" aria-label="Skip intro animation">
             <span>SKIP INTRO</span>
             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
                 <polygon points="5 4 15 12 5 20 5 4"></polygon>
@@ -47,7 +47,7 @@
         </button>
 
         <!-- Main Intro Content Container -->
-        <div class="intro-content-wrapper">
+        <div class="welcome-intro__content intro-content-wrapper">
             <!-- Studio Badge -->
             <div class="intro-badge-wrapper">
                 <div class="intro-logo-badge">
@@ -56,24 +56,24 @@
                 </div>
             </div>
 
-            <!-- Multilingual Welcome Reveal -->
+            <!-- Multilingual Welcome Sequence -->
             <div class="intro-multilingual-container">
-                <div id="intro-welcome-text" class="intro-welcome-text">WELCOME</div>
+                <div id="intro-welcome-text" class="welcome-intro__language intro-welcome-text">WELCOME</div>
             </div>
 
             <!-- Tagline Message -->
             <div id="intro-tagline-container" class="intro-tagline-container">
-                <div id="intro-final-message" class="intro-final-message">CRAFTING VISUAL STORIES</div>
+                <div id="intro-final-message" class="welcome-intro__tagline intro-final-message">CRAFTING VISUAL STORIES</div>
             </div>
 
             <!-- Progress Bar & Loading Block -->
-            <div class="intro-progress-block">
+            <div class="welcome-intro__progress intro-progress-block">
                 <div class="intro-progress-bar-container">
-                    <div id="intro-progress-fill" class="intro-progress-fill"></div>
+                    <div id="intro-progress-fill" class="welcome-intro__progress-fill intro-progress-fill"></div>
                 </div>
                 <div class="intro-progress-info">
-                    <span id="intro-status-text" class="intro-status-text">LOADING</span>
-                    <span id="intro-progress-counter" class="intro-progress-counter">0%</span>
+                    <span id="intro-status-text" class="welcome-intro__status intro-status-text">LOADING</span>
+                    <span id="intro-progress-counter" class="welcome-intro__progress-counter intro-progress-counter">0%</span>
                 </div>
             </div>
         </div>

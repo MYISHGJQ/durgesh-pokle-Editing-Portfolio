@@ -285,13 +285,17 @@ const renderPortfolio = () => {
 };
 
 /* ==========================================================================
-   CINEMATIC GAME-STYLE WELCOME INTRO CONTROLLER
+   ISOLATED WELCOME INTRO CONTROLLER (#welcome-intro / .welcome-intro)
    ========================================================================== */
 function initWelcomeIntro() {
-    const introOverlay = document.getElementById('cinematic-intro');
+    if (window.__welcomeIntroActive) return;
+    window.__welcomeIntroActive = true;
+
+    const introOverlay = document.getElementById('welcome-intro') || document.getElementById('cinematic-intro');
     if (!introOverlay) return;
 
-    // Lock page scroll immediately on load
+    // Save initial body overflow and lock background scrolling while intro is active
+    const savedOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     // Force scroll position to top/home section on load or refresh
@@ -300,14 +304,14 @@ function initWelcomeIntro() {
     }
     window.scrollTo(0, 0);
 
-    const skipBtn = document.getElementById('intro-skip-btn');
-    const welcomeTextEl = document.getElementById('intro-welcome-text');
-    const progressBlockEl = document.querySelector('.intro-progress-block');
-    const progressFillEl = document.getElementById('intro-progress-fill');
-    const progressCounterEl = document.getElementById('intro-progress-counter');
-    const statusTextEl = document.getElementById('intro-status-text');
-    const finalMessageEl = document.getElementById('intro-final-message');
-    const canvas = document.getElementById('intro-particles-canvas');
+    const skipBtn = document.querySelector('.welcome-intro__skip') || document.getElementById('intro-skip-btn');
+    const welcomeTextEl = document.querySelector('.welcome-intro__language') || document.getElementById('intro-welcome-text');
+    const progressBlockEl = document.querySelector('.welcome-intro__progress') || document.querySelector('.intro-progress-block');
+    const progressFillEl = document.querySelector('.welcome-intro__progress-fill') || document.getElementById('intro-progress-fill');
+    const progressCounterEl = document.querySelector('.welcome-intro__progress-counter') || document.getElementById('intro-progress-counter');
+    const statusTextEl = document.querySelector('.welcome-intro__status') || document.getElementById('intro-status-text');
+    const finalMessageEl = document.querySelector('.welcome-intro__tagline') || document.getElementById('intro-final-message');
+    const canvas = document.querySelector('.welcome-intro__particles') || document.getElementById('intro-particles-canvas');
 
     const languages = [
         { text: 'WELCOME' },
@@ -387,18 +391,18 @@ function initWelcomeIntro() {
 
         setTimeout(() => {
             introOverlay.style.display = 'none';
-            document.body.style.overflow = '';
+            document.body.style.overflow = savedOverflow || '';
 
-            // Always navigate to HOME section on completion
+            // Strip hash from URL if present and smoothly scroll to HOME section
+            if (window.location.hash) {
+                history.replaceState(null, null, window.location.pathname + window.location.search);
+            }
+
             const homeSection = document.getElementById('home');
             if (homeSection) {
                 homeSection.scrollIntoView({ behavior: 'smooth' });
             } else {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-
-            if (window.location.hash) {
-                history.replaceState(null, null, window.location.pathname);
             }
         }, 650);
     };
@@ -411,7 +415,7 @@ function initWelcomeIntro() {
         });
     }
 
-    // 4. Reduced Motion Check
+    // 4. Reduced Motion Handling
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
         setTimeout(completeIntro, 800);
@@ -419,9 +423,9 @@ function initWelcomeIntro() {
     }
 
     // 5. Sequential Intro Pipeline
-    // Step 1: Multilingual Word Sequence (WELCOME -> स्वागत है -> स्वागत आहे -> ようこそ -> BIENVENIDO)
+    // Step 1: Multilingual Word Sequence
     let currentLangIdx = 0;
-    const langInterval = 550; // ms per word display
+    const langInterval = 550;
 
     const updateWord = (idx) => {
         if (!welcomeTextEl || isFinished) return;
@@ -456,7 +460,7 @@ function initWelcomeIntro() {
         } else {
             clearInterval(wordTimer);
 
-            // Step 2: Transition from Multilingual sequence to "CRAFTING VISUAL STORIES"
+            // Step 2: Transition to "CRAFTING VISUAL STORIES"
             setTimeout(() => {
                 if (isFinished) return;
                 if (welcomeTextEl) {

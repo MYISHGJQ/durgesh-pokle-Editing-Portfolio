@@ -2332,10 +2332,14 @@ a.detail-value:hover {
 /* ==========================================================================
    CINEMATIC GAME-STYLE WELCOME INTRO SCREEN
    ========================================================================== */
+#welcome-intro,
+.welcome-intro,
 .cinematic-intro-overlay {
     position: fixed;
     top: 0;
     left: 0;
+    right: 0;
+    bottom: 0;
     width: 100vw;
     height: 100vh;
     height: 100dvh;
@@ -2354,6 +2358,8 @@ a.detail-value:hover {
     will-change: opacity, transform;
 }
 
+#welcome-intro.fade-out,
+.welcome-intro.fade-out,
 .cinematic-intro-overlay.fade-out {
     opacity: 0;
     transform: scale(1.05);
@@ -2362,6 +2368,7 @@ a.detail-value:hover {
 }
 
 /* Background Particle Canvas & Ambient Lighting */
+.welcome-intro__particles,
 .intro-canvas {
     position: absolute;
     top: 0;
