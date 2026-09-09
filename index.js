@@ -300,6 +300,14 @@ const WELCOME_INTRO_TIMING_CONFIG = {
 };
 
 function initWelcomeIntro() {
+    // If the intro overlay element is missing (e.g., script error or removed), ensure hero is visible
+    const introOverlayCheck = document.getElementById('welcome-intro') || document.getElementById('cinematic-intro');
+    if (!introOverlayCheck) {
+        // Remove intro-related classes so the home hero displays normally
+        document.body.classList.remove('intro-active', 'intro-reveal');
+        // No further intro processing needed
+        return;
+    }
     if (window.__welcomeIntroActive) return;
     window.__welcomeIntroActive = true;
 
@@ -391,41 +399,45 @@ function initWelcomeIntro() {
         renderParticles();
     }
 
-    // 2. Finish & Transition Function
+    // 2. Seamless Finish & Transition Function
     const completeIntro = () => {
         if (isFinished) return;
         isFinished = true;
         particlesActive = false;
         if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
-        // Fade out overlay
+        // Strip hash from URL if present and ensure home section is positioned underneath
+        if (window.location.hash) {
+            history.replaceState(null, null, window.location.pathname + window.location.search);
+        }
+
+        const homeSection = document.getElementById('home');
+        if (homeSection) {
+            homeSection.scrollIntoView({ behavior: 'instant' });
+        } else {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+        }
+
+        // Trigger simultaneous intro overlay fade-out and Home content reveal
+        document.body.classList.add('intro-reveal');
         introOverlay.classList.add('fade-out');
 
         setTimeout(() => {
             introOverlay.style.display = 'none';
             document.body.style.overflow = savedOverflow || '';
-
-            // Strip hash from URL if present and smoothly scroll to HOME section
-            if (window.location.hash) {
-                history.replaceState(null, null, window.location.pathname + window.location.search);
-            }
-
-            const homeSection = document.getElementById('home');
-            if (homeSection) {
-                homeSection.scrollIntoView({ behavior: 'smooth' });
-            } else {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-        }, 650);
+            document.body.classList.remove('intro-active', 'intro-reveal');
+        }, 850);
     };
 
     // 3. Skip Button Listener
     if (skipBtn) {
-        skipBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+    // Safety fallback: ensure intro completes after a maximum of 8 seconds in case of unexpected errors
+    setTimeout(() => {
+        if (!isFinished) {
             completeIntro();
-        });
-    }
+        }
+    }, 8000);
+
 
     // 4. Reduced Motion Handling
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
