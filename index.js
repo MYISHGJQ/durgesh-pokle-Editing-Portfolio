@@ -282,6 +282,8 @@ const renderPortfolio = () => {
         `;
         grid.insertAdjacentHTML('beforeend', cardHtml);
     });
+};
+
 /* ==========================================================================
    CINEMATIC GAME-STYLE WELCOME INTRO CONTROLLER
    ========================================================================== */
@@ -300,13 +302,13 @@ function initWelcomeIntro() {
 
     const skipBtn = document.getElementById('intro-skip-btn');
     const welcomeTextEl = document.getElementById('intro-welcome-text');
+    const progressBlockEl = document.querySelector('.intro-progress-block');
     const progressFillEl = document.getElementById('intro-progress-fill');
     const progressCounterEl = document.getElementById('intro-progress-counter');
     const statusTextEl = document.getElementById('intro-status-text');
     const finalMessageEl = document.getElementById('intro-final-message');
     const canvas = document.getElementById('intro-particles-canvas');
 
-    // Multilingual Welcome sequence
     const languages = [
         { text: 'WELCOME' },
         { text: 'स्वागत है' },
@@ -340,7 +342,7 @@ function initWelcomeIntro() {
                 y: Math.random() * height,
                 radius: Math.random() * 1.5 + 0.5,
                 alpha: Math.random() * 0.5 + 0.1,
-                speedY: -(Math.random() * 0.45 + 0.15),
+                speedY: -(Math.random() * 0.4 + 0.15),
                 speedX: (Math.random() - 0.5) * 0.25,
                 pulse: Math.random() * 0.02 + 0.005
             });
@@ -387,7 +389,7 @@ function initWelcomeIntro() {
             introOverlay.style.display = 'none';
             document.body.style.overflow = '';
 
-            // Navigate/Scroll to HOME section
+            // Always navigate to HOME section on completion
             const homeSection = document.getElementById('home');
             if (homeSection) {
                 homeSection.scrollIntoView({ behavior: 'smooth' });
@@ -409,21 +411,19 @@ function initWelcomeIntro() {
         });
     }
 
-    // 4. Reduced Motion Handling
+    // 4. Reduced Motion Check
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReducedMotion) {
         setTimeout(completeIntro, 800);
         return;
     }
 
-    // 5. Sequence Timings
-    let startTime = null;
-    const duration = 4300; // ms for progress bar fill
-
+    // 5. Sequential Intro Pipeline
+    // Step 1: Multilingual Word Sequence (WELCOME -> स्वागत है -> स्वागत आहे -> ようこそ -> BIENVENIDO)
     let currentLangIdx = 0;
-    const langSwitchInterval = 620; // ms per language
+    const langInterval = 550; // ms per word display
 
-    const updateWelcomeWord = (idx) => {
+    const updateWord = (idx) => {
         if (!welcomeTextEl || isFinished) return;
         welcomeTextEl.classList.remove('active');
         welcomeTextEl.classList.add('exit');
@@ -433,59 +433,71 @@ function initWelcomeIntro() {
             welcomeTextEl.textContent = languages[idx].text;
             welcomeTextEl.classList.remove('exit');
             welcomeTextEl.classList.add('active');
-        }, 180);
+        }, 160);
     };
 
-    // Start with first language
+    // Show initial word "WELCOME"
     setTimeout(() => {
         if (welcomeTextEl && !isFinished) {
             welcomeTextEl.textContent = languages[0].text;
             welcomeTextEl.classList.add('active');
         }
-    }, 350);
+    }, 250);
 
-    // Multilingual interval loop
-    const langInterval = setInterval(() => {
+    // Loop through remaining languages
+    const wordTimer = setInterval(() => {
         if (isFinished) {
-            clearInterval(langInterval);
+            clearInterval(wordTimer);
             return;
         }
         currentLangIdx++;
         if (currentLangIdx < languages.length) {
-            updateWelcomeWord(currentLangIdx);
+            updateWord(currentLangIdx);
         } else {
-            clearInterval(langInterval);
+            clearInterval(wordTimer);
+
+            // Step 2: Transition from Multilingual sequence to "CRAFTING VISUAL STORIES"
+            setTimeout(() => {
+                if (isFinished) return;
+                if (welcomeTextEl) {
+                    welcomeTextEl.classList.remove('active');
+                    welcomeTextEl.classList.add('exit');
+                }
+
+                setTimeout(() => {
+                    if (isFinished) return;
+                    if (finalMessageEl) finalMessageEl.classList.add('visible');
+
+                    // Step 3: Reveal Loading Progress Bar & fill from 0% to 100%
+                    setTimeout(() => {
+                        if (isFinished) return;
+                        if (progressBlockEl) progressBlockEl.classList.add('visible');
+
+                        let startTime = null;
+                        const fillDuration = 1800; // ms to fill loading bar
+
+                        function animateProgress(timestamp) {
+                            if (!startTime) startTime = timestamp;
+                            const elapsed = timestamp - startTime;
+                            const progress = Math.min(Math.floor((elapsed / fillDuration) * 100), 100);
+
+                            if (progressFillEl) progressFillEl.style.width = `${progress}%`;
+                            if (progressCounterEl) progressCounterEl.textContent = `${progress}%`;
+
+                            if (progress < 100 && !isFinished) {
+                                requestAnimationFrame(animateProgress);
+                            } else if (progress >= 100 && !isFinished) {
+                                if (statusTextEl) statusTextEl.textContent = "READY";
+                                setTimeout(completeIntro, 450);
+                            }
+                        }
+
+                        requestAnimationFrame(animateProgress);
+                    }, 400);
+                }, 300);
+            }, 550);
         }
-    }, langSwitchInterval + 180);
-
-    // Smooth Progress Bar & Counter Loop
-    function animateProgress(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed = timestamp - startTime;
-        const progress = Math.min(Math.floor((elapsed / duration) * 100), 100);
-
-        if (progressFillEl) progressFillEl.style.width = `${progress}%`;
-        if (progressCounterEl) progressCounterEl.textContent = `${progress}%`;
-
-        if (progress > 30 && progress < 70 && statusTextEl) {
-            statusTextEl.textContent = "SYNCHRONIZING GRAPHICS ENGINE";
-        } else if (progress >= 70 && progress < 100 && statusTextEl) {
-            statusTextEl.textContent = "BUILDING VISUAL EXPERIENCE";
-        }
-
-        if (progress >= 92 && finalMessageEl) {
-            finalMessageEl.classList.add('visible');
-        }
-
-        if (progress < 100 && !isFinished) {
-            requestAnimationFrame(animateProgress);
-        } else if (progress >= 100 && !isFinished) {
-            if (statusTextEl) statusTextEl.textContent = "PORTFOLIO READY";
-            setTimeout(completeIntro, 550);
-        }
-    }
-
-    requestAnimationFrame(animateProgress);
+    }, langInterval + 160);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

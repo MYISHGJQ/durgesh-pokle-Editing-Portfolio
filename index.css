@@ -2479,38 +2479,33 @@ a.detail-value:hover {
     position: relative;
     z-index: 5;
     width: 90%;
-    max-width: 720px;
+    max-width: 640px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
+    gap: 28px;
     padding: 20px;
 }
 
-/* Brand Block */
-.intro-brand-block {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
+.intro-badge-wrapper {
     opacity: 0;
-    transform: translateY(18px);
-    animation: introFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    transform: translateY(12px);
+    animation: introFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
 }
 
 .intro-logo-badge {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 5px 14px;
+    padding: 5px 16px;
     background: rgba(243, 162, 24, 0.08);
     border: 1px solid rgba(243, 162, 24, 0.22);
     border-radius: 20px;
-    font-size: 0.65rem;
+    font-size: 0.68rem;
     font-weight: 700;
-    letter-spacing: 0.22em;
+    letter-spacing: 0.24em;
     color: var(--accent-gold);
     text-transform: uppercase;
 }
@@ -2523,37 +2518,9 @@ a.detail-value:hover {
     box-shadow: 0 0 8px var(--accent-gold);
 }
 
-.intro-name-title {
-    font-family: var(--font-serif);
-    font-size: clamp(2.2rem, 6.5vw, 3.8rem);
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    background: linear-gradient(180deg, #ffffff 0%, #e0e0e0 55%, rgba(243, 162, 24, 0.95) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
-    margin: 0;
-    line-height: 1.1;
-}
-
-.intro-subtitle {
-    font-size: clamp(0.68rem, 2.2vw, 0.88rem);
-    font-weight: 600;
-    letter-spacing: 0.22em;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    margin: 0;
-}
-
-.intro-subtitle .bullet {
-    color: var(--accent-gold);
-    margin: 0 6px;
-}
-
 /* Multilingual Container & Animation */
 .intro-multilingual-container {
-    height: 48px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2564,15 +2531,15 @@ a.detail-value:hover {
 
 .intro-welcome-text {
     font-family: var(--font-serif);
-    font-size: clamp(1.4rem, 4.5vw, 2.2rem);
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
     font-weight: 700;
-    letter-spacing: 0.16em;
+    letter-spacing: 0.18em;
     color: #ffffff;
     text-transform: uppercase;
     opacity: 0;
-    transform: translateY(14px) scale(0.95);
+    transform: translateY(16px) scale(0.95);
     transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    text-shadow: 0 0 25px rgba(243, 162, 24, 0.45);
+    text-shadow: 0 0 30px rgba(243, 162, 24, 0.5);
 }
 
 .intro-welcome-text.active {
@@ -2582,35 +2549,49 @@ a.detail-value:hover {
 
 .intro-welcome-text.exit {
     opacity: 0;
-    transform: translateY(-14px) scale(1.05);
+    transform: translateY(-16px) scale(1.05);
+}
+
+/* Tagline Container */
+.intro-tagline-container {
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+
+.intro-final-message {
+    font-size: clamp(0.8rem, 2.4vw, 1.05rem);
+    font-weight: 800;
+    letter-spacing: 0.28em;
+    color: var(--accent-gold);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.intro-final-message.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* Progress Block */
 .intro-progress-block {
     width: 100%;
-    max-width: 440px;
+    max-width: 400px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
     opacity: 0;
-    transform: translateY(18px);
-    animation: introFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+    transform: translateY(14px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.intro-final-message {
-    font-size: clamp(0.72rem, 2vw, 0.88rem);
-    font-weight: 800;
-    letter-spacing: 0.26em;
-    color: var(--accent-gold);
-    text-transform: uppercase;
-    height: 22px;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-
-.intro-final-message.visible {
+.intro-progress-block.visible {
     opacity: 1;
     transform: translateY(0);
 }
@@ -2641,7 +2622,7 @@ a.detail-value:hover {
     justify-content: space-between;
     font-size: 0.68rem;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.18em;
     color: var(--text-muted);
     text-transform: uppercase;
 }
