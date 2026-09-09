@@ -5,4 +5,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://durgesh-pokle-portfolio.netlify.app/sitemap.xml
+Sitemap: https://durgesh-pokle-portfolio.vercel.app/sitemap.xml
