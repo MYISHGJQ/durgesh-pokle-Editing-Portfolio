@@ -16,7 +16,36 @@
         rel="stylesheet">
 
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="index.css?v=11">
+
+    <!-- Critical Welcome Intro Overlay Styles (Guarantees standalone localhost positioning) -->
+    <style>
+        #welcome-intro,
+        .welcome-intro,
+        .cinematic-intro-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            z-index: 999999 !important;
+            background-color: #030303 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        #welcome-intro.fade-out,
+        .welcome-intro.fade-out,
+        .cinematic-intro-overlay.fade-out {
+            opacity: 0 !important;
+            pointer-events: none !important;
+            visibility: hidden !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -965,7 +994,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- JS Logic -->
-    <script src="index.js?v=10"></script>
+    <script src="index.js?v=11"></script>
 </body>
 
 </html>
