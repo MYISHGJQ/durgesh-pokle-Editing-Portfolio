@@ -287,6 +287,18 @@ const renderPortfolio = () => {
 /* ==========================================================================
    ISOLATED WELCOME INTRO CONTROLLER (#welcome-intro / .welcome-intro)
    ========================================================================== */
+
+// Configurable timing settings for welcome intro
+const WELCOME_INTRO_TIMING_CONFIG = {
+    langHoldMs: 500,         // Target duration per language (~500ms total)
+    langTransitionMs: 150,   // Transition duration for enter/exit (150ms)
+    initialDelayMs: 200,     // Initial delay before first word appears
+    taglineTransitionMs: 400,// Delay before showing "CRAFTING VISUAL STORIES"
+    progressDelayMs: 350,    // Delay before showing loading bar
+    progressFillMs: 1600,    // Duration to fill loading bar 0% -> 100%
+    completionDelayMs: 400   // Delay before intro overlay fades out
+};
+
 function initWelcomeIntro() {
     if (window.__welcomeIntroActive) return;
     window.__welcomeIntroActive = true;
@@ -423,9 +435,9 @@ function initWelcomeIntro() {
     }
 
     // 5. Sequential Intro Pipeline
-    // Step 1: Multilingual Word Sequence
+    // Step 1: Multilingual Word Sequence (~500ms per word)
     let currentLangIdx = 0;
-    const langInterval = 550;
+    const { langHoldMs, langTransitionMs, initialDelayMs } = WELCOME_INTRO_TIMING_CONFIG;
 
     const updateWord = (idx) => {
         if (!welcomeTextEl || isFinished) return;
@@ -437,7 +449,7 @@ function initWelcomeIntro() {
             welcomeTextEl.textContent = languages[idx].text;
             welcomeTextEl.classList.remove('exit');
             welcomeTextEl.classList.add('active');
-        }, 160);
+        }, langTransitionMs);
     };
 
     // Show initial word "WELCOME"
@@ -446,9 +458,9 @@ function initWelcomeIntro() {
             welcomeTextEl.textContent = languages[0].text;
             welcomeTextEl.classList.add('active');
         }
-    }, 250);
+    }, initialDelayMs);
 
-    // Loop through remaining languages
+    // Loop through remaining languages at 500ms intervals
     const wordTimer = setInterval(() => {
         if (isFinished) {
             clearInterval(wordTimer);
@@ -460,7 +472,7 @@ function initWelcomeIntro() {
         } else {
             clearInterval(wordTimer);
 
-            // Step 2: Transition to "CRAFTING VISUAL STORIES"
+            // Step 2: Transition from Multilingual sequence to "CRAFTING VISUAL STORIES"
             setTimeout(() => {
                 if (isFinished) return;
                 if (welcomeTextEl) {
@@ -478,7 +490,7 @@ function initWelcomeIntro() {
                         if (progressBlockEl) progressBlockEl.classList.add('visible');
 
                         let startTime = null;
-                        const fillDuration = 1800; // ms to fill loading bar
+                        const fillDuration = WELCOME_INTRO_TIMING_CONFIG.progressFillMs;
 
                         function animateProgress(timestamp) {
                             if (!startTime) startTime = timestamp;
@@ -492,16 +504,16 @@ function initWelcomeIntro() {
                                 requestAnimationFrame(animateProgress);
                             } else if (progress >= 100 && !isFinished) {
                                 if (statusTextEl) statusTextEl.textContent = "READY";
-                                setTimeout(completeIntro, 450);
+                                setTimeout(completeIntro, WELCOME_INTRO_TIMING_CONFIG.completionDelayMs);
                             }
                         }
 
                         requestAnimationFrame(animateProgress);
-                    }, 400);
-                }, 300);
-            }, 550);
+                    }, WELCOME_INTRO_TIMING_CONFIG.progressDelayMs);
+                }, langTransitionMs);
+            }, WELCOME_INTRO_TIMING_CONFIG.taglineTransitionMs);
         }
-    }, langInterval + 160);
+    }, langHoldMs);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

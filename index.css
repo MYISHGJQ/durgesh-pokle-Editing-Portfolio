@@ -2544,19 +2544,23 @@ a.detail-value:hover {
     color: #ffffff;
     text-transform: uppercase;
     opacity: 0;
-    transform: translateY(16px) scale(0.95);
-    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateY(14px) scale(0.96);
+    filter: blur(4px);
+    transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), filter 0.15s cubic-bezier(0.16, 1, 0.3, 1);
     text-shadow: 0 0 30px rgba(243, 162, 24, 0.5);
+    will-change: opacity, transform, filter;
 }
 
 .intro-welcome-text.active {
     opacity: 1;
     transform: translateY(0) scale(1);
+    filter: blur(0px);
 }
 
 .intro-welcome-text.exit {
     opacity: 0;
-    transform: translateY(-16px) scale(1.05);
+    transform: translateY(-14px) scale(1.04);
+    filter: blur(4px);
 }
 
 /* Tagline Container */
