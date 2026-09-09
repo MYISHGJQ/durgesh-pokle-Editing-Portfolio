@@ -17,7 +17,7 @@
 
     <!-- CSS Stylesheet -->
     <link rel="stylesheet" href="index.css?v=11">
-
+<meta name="google-site-verification" content="KGxzMPKxsK1zvwPDqOlCzVCVQMoFP20D1-6VyLwnsjw">
     <!-- Critical Welcome Intro Overlay Styles (Guarantees standalone localhost positioning) -->
     <style>
         #welcome-intro,
@@ -44,11 +44,31 @@
             opacity: 0 !important;
             pointer-events: none !important;
             visibility: hidden !important;
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), filter 0.85s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.85s !important;
+        }
+
+        /* Seamless Home Page Entrance Reveal */
+        body.intro-active #home .hero-content,
+        body.intro-active .site-header {
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(6px);
+            transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                        filter 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+            will-change: opacity, transform, filter;
+        }
+
+        body.intro-reveal #home .hero-content,
+        body.intro-reveal .site-header {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
         }
     </style>
 </head>
 
-<body>
+<body class="intro-active">
 
     <!-- Welcome Intro Screen Overlay -->
     <div id="welcome-intro" class="welcome-intro cinematic-intro-overlay" role="dialog" aria-label="Welcome Intro">
