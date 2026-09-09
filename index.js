@@ -431,6 +431,8 @@ function initWelcomeIntro() {
 
     // 3. Skip Button Listener
     if (skipBtn) {
+        skipBtn.addEventListener('click', completeIntro);
+    }
     // Safety fallback: ensure intro completes after a maximum of 8 seconds in case of unexpected errors
     setTimeout(() => {
         if (!isFinished) {
